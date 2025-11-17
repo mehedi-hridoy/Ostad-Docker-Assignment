@@ -1,0 +1,62 @@
+version: '3.9'
+
+services:
+  #------- MongoDb -------
+  mongo:
+    image: mongo:5.0
+    container_name: ostad-mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root123
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  #---- Mongo Express ----
+  mongo-express:
+    image: mongo-express:latest
+    container_name: ostad-mongo-express
+    restart: always
+    depends_on:
+      - mongo
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: root123
+      ME_CONFIG_MONGODB_SERVER: mongo
+    ports:
+      - "8081:8081"
+
+  # -- Backend ------------
+  ostad-server:
+    build:
+      context: .
+      dockerfile: Dockerfile-server
+    container_name: ostad-server
+    restart: always
+    depends_on:
+      - mongo
+    environment:
+      MONGO_URI: "mongodb://root:root123@mongo:27017/"
+      PORT: 5050
+    ports:
+      - "5050:5050"
+
+  # -- Frontend -----------
+  ostad-ui:
+    build:
+      context: .
+      dockerfile: Dockerfile-UI
+    container_name: ostad-ui
+    restart: always
+    depends_on:
+      - ostad-server
+    environment:
+      VITE_SERVER_URL: "http://localhost:5050"
+    ports:
+      - "5173:5173"
+
+volumes:
+  mongo_data:
+

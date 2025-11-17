@@ -5,7 +5,8 @@ const path = require("path");
 const { MongoClient } = require("mongodb");
 
 const PORT = 5050;
-const MONGO_URL = "mongodb://ostad:ostad@mongo:27017";
+const MONGO_URL = "mongodb://root:root123@mongo:27017";
+
 const client = new MongoClient(MONGO_URL);
 
 // Middleware
@@ -59,7 +60,7 @@ app.post("/addStudent", async (req, res) => {
 });
 
 // Start server
-app.listen(PORT, async () => {
+app.listen(PORT, "0.0.0.0", async () => {
   await connectDB();
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
