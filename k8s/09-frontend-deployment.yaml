@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ostad-ui
+  namespace: ostad-mehedi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ostad-ui
+  template:
+    metadata:
+      labels:
+        app: ostad-ui
+    spec:
+      containers:
+      - name: ostad-ui
+        image: ostad-ui:1.0
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5173
+          name: ui-port
+        env:
+        - name: VITE_SERVER_URL
+          valueFrom:
+            configMapKeyRef:
+              name: ostad-config
+              key: VITE_SERVER_URL
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "500m"

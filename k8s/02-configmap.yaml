@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ostad-config
+  namespace: ostad-mehedi
+data:
+  MONGO_SERVER: "mongo"
+  MONGO_PORT: "27017"
+  MONGO_DATABASE: "Ostad-DB"
+  BACKEND_URL: "http://ostad-server:5050"
+  VITE_SERVER_URL: "http://localhost:5050"
+  ME_CONFIG_MONGODB_SERVER: "mongo"
